@@ -45,68 +45,6 @@ snippet in
 snippet tc
 	public class ${1:`Filename()`} extends ${2:TestCase}
 ##
-## Class Enhancements
-snippet ext
-	extends 
-snippet imp
-	implements
-##
-## Comments
-snippet /*
-	/*
-	 * ${1}
-	 */
-##
-## Constants
-snippet co
-	static public final ${1:String} ${2:var} = ${3};${4}
-snippet cos
-	static public final String ${1:var} = "${2}";${3}
-##
-## Control Statements
-snippet case
-	case ${1}:
-		${2}
-snippet def
-	default:
-		${2}
-snippet el
-	else
-snippet elif
-	else if (${1}) ${2}
-snippet if
-	if (${1}) ${2}
-snippet sw
-	switch (${1}) {
-		${2}
-	}
-##
-## Create a Method
-snippet m
-	${1:void} ${2:method}(${3}) ${4:throws }${5}
-##
-## Create a Variable
-snippet v
-	${1:String} ${2:var}${3: = null}${4};${5}
-##
-## Enhancements to Methods, variables, classes, etc.
-snippet ab
-	abstract
-snippet fi
-	final
-snippet st
-	static
-snippet sy
-	synchronized
-##
-## Error Methods
-snippet err
-	System.err.print("${1:Message}");
-snippet errf
-	System.err.printf("${1:Message}", ${2:exception});
-snippet errln
-	System.err.println("${1:Message}");
-##
 ## Exception Handling
 snippet as
 	assert ${1:test} : "${2:Failure message}";${3}
@@ -149,92 +87,231 @@ snippet @pa
 	@param ${1:param}
 snippet @re
 	@return ${1:param}
-##
-## Logger Methods
-snippet debug
-	Logger.debug(${1:param});${2}
-snippet error
-	Logger.error(${1:param});${2}
-snippet info
-	Logger.info(${1:param});${2}
-snippet warn
-	Logger.warn(${1:param});${2}
-##
-## Loops
-snippet enfor
-	for (${1} : ${2}) ${3}
-snippet for
-	for (${1}; ${2}; ${3}) ${4}
-snippet wh
-	while (${1}) ${2}
-##
-## Main method
-snippet main
+
+############################ added by me	
+snippet class:public_abstract_class
+	${1:public} ${2:abstract} ${3:class} ${4:`Filename()`} {
+		${2:/* your code */}	
+	}
+
+snippet class:extends
+	${1:public} ${2:interface/class} ${2:`Filename()`} extends ${3:ExtendedClassName} {
+		${4:/* your code */}	
+	}
+
+snippet class:implements
+	${1:public} class ${2:`Filename()`} implements ${3:InterfaceName} {
+		${4:/* your code */}
+	}
+
+snippet class:thread
+	${1:ClassType} class ${2:`Filename()`} extends Thread {
+
+		@Override
+		public void run() {
+			${3:/* your code */}
+		}
+
+	}
+
+snippet method:synchronized
+	synchronized ${1:public} ${2:void} ${3:function}(${4:parameters}) {
+		${5:/* your code */}	
+	}
+
+snippet method:main
 	public static void main (String[] args) {
 		${1:/* code */}
 	}
-##
-## Print Methods
-snippet print
-	System.out.print("${1:Message}");
-snippet printf
-	System.out.printf("${1:Message}", ${2:args});
-snippet println
-	System.out.println(${1});
-##
-## Render Methods
-snippet ren
-	render(${1:param});${2}
-snippet rena
-	renderArgs.put("${1}", ${2});${3}
-snippet renb
-	renderBinary(${1:param});${2}
-snippet renj
-	renderJSON(${1:param});${2}
-snippet renx
-	renderXml(${1:param});${2}
-##
-## Setter and Getter Methods
-snippet set
-	${1:public} void set${3:}(${2:String} ${4:}){
-		this.$4 = $4;
+
+snippet array:new_array Without initialize
+	${1:byte}[] ${2:name} = new $1[${3:64*1024}];
+
+snippet array:new_array With initialize
+	${1:byte}[] ${2:name} = new $1[]{${3:'a', 'b', 'c'}};
+	
+snippet prefix:static_final
+	${1:public} static final ${2:}
+
+snippet flow:while
+	while(${1:true}) {
+		${2:/* your code */}
 	}
-snippet get
-	${1:public} ${2:String} get${3:}(){
-		return this.${4:};
+
+snippet flow:if
+	if(${1:true}) {
+		${2:/* your code */}
 	}
-##
-## Terminate Methods or Loops
-snippet re
-	return
-snippet br
-	break;
-##
-## Test Methods
-snippet t
-	public void test${1:Name}() throws Exception {
-		${2}
+
+snippet flow:for
+	for (${1:int i = 0}; ${2:i >= 0}; ${3:i--}) {
+		${4:/* your code */}
 	}
-snippet test
-	@Test
-	public void test${1:Name}() throws Exception {
-		${2}
+
+snippet flow:forEach
+	for (${1:Long} ${2:id} : ${3:set}) {
+		${4:/* your code */}
 	}
-##
-## Utils
-snippet Sc
-	Scanner
-##
-## Miscellaneous
-snippet action
-	public static void ${1:index}(${2:args}) { ${3} }
-snippet rnf
-	notFound(${1:param});${2}
-snippet rnfin
-	notFoundIfNull(${1:param});${2}
-snippet rr
-	redirect(${1:param});${2}
-snippet ru
-	unauthorized(${1:param});${2}
-snippet unless
-	(unless=${1:param});${2}
+
+snippet exception:throw_new
+	throw new ${1:ExceptionName}(${2:});
+
+snippet log:slf4j_init
+	static final Logger LOG = LoggerFactory.getLogger(${1:ClassName.class});
+	${2:/* LOG.debug("log ()  and ()", obj1, obj2); LOG.info(), warn, error*/}
+
+snippet container:set
+
+snippet variable:atomic
+	${1:private} Atomic${2:Integer/Boolean/Long/IntegerArray/LongArray/Reference/ReferenceArray} ${3:variablename} = new Atomic$2(${4:initialValue});
+	${5:}
+
+snippet atomic.addAndGet
+	int ${1:result} = ${2:atomic}.addAndGet(${3:int delta});
+	${4:/* Atomically adds the given value to the current value. */}
+
+snippet atomic.decrementAndGet
+	int ${1:result} = ${2:atomic}.decrementAndGet();
+	${3:/* Atomically decrements by one the current value. */}
+
+snippet atomic.doubleValue
+	double ${1:result} = ${2:atomic}.doubleValue();
+	${3:/* Returns the value of the specified number as a double. */}
+
+snippet atomic.floatValue
+	float ${1:result} = ${2:atomic}.floatValue();
+	${3:/* Returns the value of the specified number as a float. */}
+
+snippet atomic.get
+	int ${1:result} = ${2:atomic}.get();
+	${3:/* Get the current value. */}
+
+snippet atomic.getAndAdd
+	int ${1:result} = ${2:atomic}.getAndAdd(${3:int delta});
+	${3:/* atomically adds the given value to the current value. */}
+
+snippet atomic.getAndDecrement
+	${1:atomic}.getAndDecrement();
+	${2:}
+
+snippet atomic.getAndIncrement
+	${1:atomic}.getAndIncrement();
+	${2:}
+
+snippet atomic.getAndSet
+	${1:atomic}.getAndSet(${2:int newValue});
+	${2:}
+
+snippet atomic.incrementAndGet
+	${1:atomic}.incrementAndGet();
+	${2:}
+
+snippet atomic.intValue
+	${1:atomic}.intValue();
+	${2:/* returns the value of the specified number as an int. */}
+
+snippet atomic.lazySet
+	${1:atomic}.lazySet(${2:int newValue});
+	${3:/* Eventually sets to the given value. */}
+
+snippet atomic.longValue
+	${1:atomic}.longValue();
+	${2:/* returns the value of the specified number as a long. */}
+
+snippet atomic.set
+	${1:atomic}.set(${2:int newValue});	
+	${3:}
+
+snippet atomic.toString
+	${1:atomic}.toString();
+
+snippet atomic.weakCompareAndSet
+	${1:atomic}.weakCompareAndSet(${2:int expect}, ${3:int update});
+	${4:/* may fail spuriously and does not provide ordering guarantees, so is only rarely an appropriate alternative to compareAndSet. */}
+
+snippet atomic.compareAndSet
+	boolean ${1:result} = ${2:atomic}.compareAndSet(${3:int expect}, ${4:int update});
+	${5:/* Atomically sets the value to the given updated value if the current value == the expected value.}
+
+snippet concurrent:synchronized
+	synchronized (${1:this}) {
+		${2:/* your code */}
+	}
+	${3:}
+	
+snippet concurrent:CountDownLatch
+	Sample usage: 
+	class Driver {
+		void main() throw InterruptedException {
+			CountDownLatch startSignal = new CountDownLatch(1);
+			CountDownLatch doneSignal = new CountDownLatch(N);
+
+			for (int i = 0; i < N; i++) {
+				new Thread(new Worker(startSignal, doneSignal)).start();
+			}
+
+			doSomethingElse();
+			startSignal.countDown();
+			doSomethingElse();
+			doneSignal.await();
+		}
+	}
+
+	class Worker implements Runnable {
+		private final CountDownLatch startSignal;
+		private final CountDownLatch doneSignal;
+
+		Worker(CountDownLatch startSignal, CountDownLatch doneSignal) {
+			this.startSignal = startSignal;
+			this.doneSignal = doneSignal;
+		}
+
+		public void run() {
+			try {
+				startSignal.await();
+				doWork();
+				doneSignal.countDown();
+			} catch (InterruptedException ex) {}
+		}
+
+		void doWork() { ... }
+	}
+	${1:/*A synchronization aid that allows one or more threads to wait until a set of operations being performed in other threads completes. The count cannot be reset, if you need a versioin that resets the count, consider using a CyclicBarrier.*/}
+
+snippet concurrent:Future
+	static class CountDownLatchFuture<T> implements Future<T> {
+		T value = null;
+		volatile boolean done = false;
+		CountDownLatch latch = new CountDownLatch(1);
+
+		@Override
+		public boolean cancel(boolean mayInterruptIfRunning) { return false; }
+
+		@Override
+		public T get() throws InterruptedException {
+			latch.await();
+			return value;
+		}
+
+		@Override
+		public T get(long timeout, TimeUnit unit)
+			throws InterruptedException, TimeoutException {
+			if (!latch.await(timeout, unit)) {
+				throw new TimeoutException("Timed out waiting for latch");
+			}
+			return value;
+		}
+
+		@Override
+		public boolean isCancelled() { return false; }
+
+		@Override
+		public boolean isDone() { return done; }
+
+		void setDone(T value) {
+			this.value = value;
+			done = true;
+			latch.countDown();
+		}
+	}
+	${1:/*A Future represents the result of an asynchronous computation. Methods are provided to check if the computation is complete, to wait for its completion, and to retrieve the result of the computation. The result can only be retrieved using method get when the computation has completed, blocking if necessary until it is ready. Cancellation is performed by the cancel method. Additional methods are provided to determine if the task completed normally or was cancelled. Once a computation has completed, the computation cannot be cancelled. If you would like to use a Future for the sake of cancellability but not provide a usable result, you can declare types of the form Future<?> and return null as a result of the underlying task.*/}

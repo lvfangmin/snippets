@@ -161,3 +161,301 @@ snippet obj
 		F.prototype = o;
 		return new F();
 	}
+
+
+
+
+
+#############################################
+# nodejs
+#############################################
+
+# extensions
+snippet ext
+	// Instruct require on how to handle certain file extensions
+	require.extensions['${1:}'] = require.extensions['${2:}'];
+	${3:}
+
+snippet	fn
+	__filename${1:/* The filename of the code being executed, isn't actually a global but rather local to each module. */}
+
+snippet dn
+	__dirname${1:/* The name of the directory that the currently executing script resides in. also local to each module. */}
+
+snippet t:setTimeout inline function
+	setTimeout(function () {
+		${1:/* your code */}		
+	}, ${2:/* milliseconds, [args]*/});
+	${3:Run callback cb after at least ms milliseconds. The actual delay depends on external factors like OS timer granularity and system load. clearTimeout(t) to stop a timer that was previously created with setTimeout()}
+
+snippet t:setTimeout function name
+	setTimeout(${1:/* callback */}, ${2:/* milliseconds */});
+	${3:Run callback cb after at least ms milliseconds. The actual delay depends on external factors like OS timer granularity and system load. clearTimeout(t) to stop a timer that was previously created with setTimeout()}
+
+snippet t:setInterval call cb repeatedly every ms milliseconds with inline function
+	setInterval(function() {
+		${1:/* your code */}
+	}, ${2:/* milliseconds */});
+	${3:Run callback cb every ms milliseconds, use clearInterval(t) to stop a timer}
+
+snippet t:setInterval call CallBack repeatedly every MS milliseconds with function
+	setInterval(${1:/* callback */}, ${2:/* milliseconds */});
+	${3:Run callback cb every ms milliseconds, use clearInterval(t) to stop a timer}
+
+snippet t:markTime
+	console.time('${1:/* mark label */}');
+	${2:/* code to estimate time */}
+	console.timeEnd('$1');
+	${3:}
+
+snippet t:setImmediate
+	setImmediate(${1:/* callback */}, ${2:/* args */});
+	${3: use clearImmediate(t) to stop an immediate from triggering.}
+
+snippet package:.json
+	{"name": "${1:/* library name */}"},
+	 "main": "${2:/* main entry */}"}
+
+snippet emit:example
+	// a.js
+	var EventEmitter = require('events').EventEmitter;
+	module.exports = new EventEmitter();
+	setTimeout(function() {
+		module.exports.emit('ready');
+	}, 1000);
+	// b.js
+	var a = require('./a');
+	a.on('ready', function() {
+		console.log('module a is ready');
+	});
+
+snippet r:module.require
+	var md = require('module').require(${1: module name});
+	${2: provides a way to load a module as if require() was called from the original module. md.id: identifier for the module, md.filename: the fully resolved filename to the module, md.loaded: whether or not the module is done loading, or is in the process of loading, md.parent: the module that required this one, md.children: the module objects required by this one. }
+
+
+snippet r:require.resolve
+	var ${1:name} = require.resolve('${2:module name}');
+	${3: to get the exact filename that will be loaded when require() is called}
+
+snippet r:mainmodule
+	var ${1:mainmodule} = require.main.filename;
+	${2: when a file is run directly from Node, require.main is set to its module, that means require.main === module will be true if run via node foo.js, false if run by require('./foo'). }
+
+############################## process
+snippet process.onExit
+	process.on('exit', function() {
+		${1:/* your code */}		
+	});
+	${2:emitted when the process is about to exit. the main event loop will no longer be run after the 'exit' callback finishes.}
+
+snipped process.onUncaughtException
+	process.on('uncaughtException', function(err) {
+		${1:/* your code */}		
+	});
+	${2:emitted when an exception bubbles all the way back to the event loop. if a listener is added for this exception, the default action(which is to print a stack trace and exit) will not occur. }
+
+snippet process.onSignal
+	process.on('${1:SIGINT}', function() {
+		${2:/* your code */}		
+	});
+
+snippet process.stdout
+	process.stdout.write(${1:content, will not print \n});
+	${2: process.stderr and process.stdout are unlike other streams in Node in that writes to them are usually blocking. They are blocking in the case that they refer to regular files or TTY file descriptors. In the case they refer to pipes, they are non-blocking like other streams.}
+
+snippet process.stderr
+	process.stderr.write(${1:content});
+	${2: process.stderr and process.stdout are unlike other streams in Node in that writes to them are usually blocking. They are blocking in the case that they refer to regular files or TTY file descriptors. In the case they refer to pipes, they are non-blocking like other streams.}
+
+snippet process.stdin
+	process.stdin.resume();
+	process.stdin.setEncoding('utf8');
+
+	process.stdin.on('data', function(chunk) {
+		${1:/* your code when data available */}
+	});
+	process.stdin.on('end', function() {
+		${2:/* your code when data available */}
+	});
+	${3: the stdin stream is paused by default, so one must call process.stdin.resume() to read from it. }
+
+snippet process.argv
+	process.argv.forEach(function(val, index, array) {
+		${1:console.log(index + ': ' + val);}			
+	});
+	${2:node process.js one two---->0: node, 1: process.js, 2: one, 3: two}
+
+snippet process.execPath
+	var ${1:name} = process.execPath;
+	${2:this is the absolute pathname of the executable that started the process, example: /usr/local/bin/node}
+
+snippet process.abort
+	process.abort();
+	${1:this causes node to emit an abort event, node will exit and generate a core file.}
+
+snippet process.chdir
+	try {
+		process.chdir(${1:dir name});
+	} catch (err) {
+		${2:console.log('chdir: ' + errr);}
+	}
+	${3:changes the current working directory of the process or throws an exception if that fails.}
+
+snippet process.cwd
+	var ${1:name} = process.cwd();
+	${2:returns the current working directory of the process.}
+
+snippet process.env
+	var env = process.env;
+	${1:the object containing the user's environment.}
+
+snippet process.exit
+	process.exit(${1:exitcode});
+	${2:ends the process with the specified code, if omitted exit uses the 'success' code 0, to exit with a 'failure' code 1}
+
+snippet process.getgid
+	var gid = process.getgid();
+	${1: only available on POSIX not windows, get the group identity of the process. return the numerical group id, not the group name.}
+
+snippet process.setgid
+	if (process.setgid) {
+		try {
+			process.setgid(${1:501});
+		} catch (err) {
+			${2: console.log('Failed to set gid: ' + err);}
+		}
+	}
+	${3:only available on POSIX, set the group identify of the process, this accepts either a numerical ID or a groupname string. If the groupname string is specified, this method will block until resolved it to a numerical ID.}
+
+snippet process.getuid
+	var uid = process.getuid();
+	${1:only available on POSIX, get the user identity of the process, this is the numerical userid, not the username.}
+
+snippet process.setuid
+	if (process.setuid) {
+		try {
+			process.setuid(${1:501});
+		} catch (err) {
+			${2: console.log('Failed to set uid: ' + err);}
+		}
+	}
+	${3:only available on POSIX, set the user identify of the process, this accepts either a numerical ID or a username string. If the username string is specified, this method will block until resolved it to a numerical ID.}
+
+snippet process.getgroups
+	var ${1:name} = process.getgroups();
+	${2:POSIX. return an array with the supplementary group ids.}
+
+snippet process.setgroups
+	if (process.setgroups) {
+		try {
+			process.setgroups(${1:array of group ids, or names});
+		} catch (err) {
+			${2: console.log('Failed to set uid: ' + err);}
+		}
+	}
+	${3:POSIX. this is a privileged operation, meaning you need to be root or have the CAP_SETGID capability.}
+
+snippet process.initgroups
+	console.log(process.getgroups());		// [0]
+	process.initgroups('bnoordhuis', 1000); // switch user
+	console.log(process.getgroups());		// [27, 30, 46, 1000, 0]
+	process.setgid(1000);					// drop root gid
+	console.log(process.getgroups());		// [27, 30, 46, 1000]
+	${1:Reads /etc/group and initializes the group access list, using all groups of which the user is a member. This is a privileged operation, meaning you need to be root or have the CAP_SETGID capability.user is a user name or user ID. extra_group is a group name or group ID.}
+
+snippet process.version
+	var nodeVersion = process.version;
+	${1: a compiled-in property that exposes NODE_VERSION}
+
+snippet process.versions
+	var versions = process.versions;
+	${1: a property exposing version strings of node and its dependencies.}
+
+##################### http
+snippet http.createServer
+	http.createServer(function(${1:request}, ${2:response}){
+		${3:/* your code */}
+		$2.writeHead(${4:200}, {'Content-Type': 'text/plain'});
+		$2.end(${5:});
+	}).listen(${6:8124});
+	${7:the request listener is automatically added to the 'request' event.}
+
+##################### javascript common
+snippet array.isArray
+	var isArr = Array.isArray(${1:item});
+	${2:}
+
+snippet array.forEach
+	${1:array}.forEach(function(item) {
+		${2:/* your code */}		
+	});
+
+snippet fn.apply
+	${1:obj.fn}.apply(${2:this}, ${3:args array});
+	${4:}
+
+snippet fn.call
+	${1:obj.fn}.call(${2:this}, ${3:args list});
+	${4:}
+
+##################### Good snippets
+snippet good:stack
+	function stack(/*layers*/) {
+		var error = function() {},
+			handle = error;
+		Array.prototype.slice.call(arguments).reverse().forEach(function (layer) {
+			var child = handle;
+			handle = function (req, res) {
+				try {
+					layer(req, res, function(err) {
+						if (err) { return error(req, res, err); }
+						child(req, res);
+					});
+				} catch (err) {
+					error(req, res, err);
+				}
+			};
+		});
+		return handle;
+	}
+	${1:a stack used to exec functions linearly.}	
+
+###################### node modules
+
+####### async
+snippet async.waterfall
+	async.waterfall([
+		function(callback) {
+			${1:/* your code */}
+		},
+		/*
+		function(callback) {
+			callback(null, 1, 2);
+		},
+		function(arg1, arg2, callback) {
+			callback(null, 3);
+		},
+		function(arg1, callback) {
+			callback(null, 'done');
+		}
+		*/
+	], function(err, result) {
+		
+	});
+
+###################### yahoo specific
+
+snippet yahoo:logger
+	var basic = require('basic');
+	basic.logging.setLevel(basic.logging.levels[${1:INFO}]);
+	var logger = basic.logging.getLogger('${2:`Filename()`}');
+
+snippet yahoo:yca
+	var yca = new (require('yca').YCA)(),
+		yca_cert = yca.get_cert(${1:YCA_APP_ID}) || 'unknown';
+	
+	${2:/* headers: <'Yahoo-App-Auth': yca_cert> */}
+
+
+
